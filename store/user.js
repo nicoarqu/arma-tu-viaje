@@ -6,13 +6,12 @@ export const state = () => ({
     uid: null, // no null si está logueado
     email: null
   },
+  afterLogin: '/users', // donde dirigirse una vez complete el login (si accedió y no tenía permiso)
   listeningAuth: false
 })
 
 export const getters = {
-  logged: (state, getters, rootState) => {
-    return state.uid !== null
-  }
+  logged: (state, getters, rootState) => state.user.uid !== null
 }
 
 export const mutations = {
@@ -28,6 +27,9 @@ export const mutations = {
   },
   setListeningAuth(state, listening) {
     state.listeningAuth = listening
+  },
+  setAfterLogin(state, payload) {
+    state.afterLogin = payload
   }
 }
 

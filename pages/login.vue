@@ -3,14 +3,16 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { auth, fb } from '~/services/fireinit'
+import { mapGetters, mapState } from 'vuex'
+import firebase, { auth } from '~/services/fireinit'
 import * as firebaseui from 'firebaseui'
 
 export default {
+  middleware: 'autenticado', // comprueba si está autenticado con el middleware autenticado.js
   data: () => ({}),
   computed: {
-    ...mapGetters('user', ['logged'])
+    ...mapGetters('user', ['logged']),
+    ...mapState('user', ['afterLogin'])
   },
   watch: {
     logged: {
@@ -25,14 +27,14 @@ export default {
   },
   methods: {
     next() {
-      this.$route.push('/users')
+      this.$router.push(this.afterLogin)
     },
     showLogin() {
       const uiConfig = {
         // signInSuccessUrl: '<url-to-redirect-to-on-success>', //En Nuxt esto sería un problema, ya que firebase-ui no usa vue-route
         signInOptions: [
           // Leave the lines as is for the providers you want to offer your users.
-          fb.auth.GoogleAuthProvider.PROVIDER_ID
+          firebase.auth.GoogleAuthProvider.PROVIDER_ID
           // firebase.auth.FacebookAuthProvider.PROVIDER_ID,
           // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
           // firebase.auth.GithubAuthProvider.PROVIDER_ID,
@@ -57,5 +59,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style src="~/node_modules/firebaseui/dist/firebaseui.css"></style>

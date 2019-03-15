@@ -1,13 +1,13 @@
 import { Config } from '~/services/config'
 // copia en /services/config.js el fichero .json con la configuración de firebase
-import firebase from 'firebase/app'
-import('firebase/auth')
-import('firebase/firestore')
-import('firebase/storage')
-
-export const fb = firebase
+import * as firebase from 'firebase/app'
+import 'firebase/auth'
+import 'firebase/firestore'
+import 'firebase/storage'
 
 firebase.initializeApp(Config)
+
+export const GoogleProvider = new firebase.auth.GoogleAuthProvider()
 
 export const auth = firebase.auth()
 
@@ -28,3 +28,5 @@ export const getCurrentUser = async () => {
   const result = await getCurrentUserPromise(auth)
   return result
 }
+
+export default firebase
