@@ -8,7 +8,7 @@ import firebase, { auth } from '~/services/fireinit'
 import * as firebaseui from 'firebaseui'
 
 export default {
-  middleware: 'autenticado', // comprueba si está autenticado con el middleware autenticado.js
+  // middleware: 'autenticado', // poner en todas las páginas que requieran autenticacin, menos esta!
   data: () => ({}),
   computed: {
     ...mapGetters('user', ['logged']),
