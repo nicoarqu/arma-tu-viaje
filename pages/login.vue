@@ -41,7 +41,7 @@ export default {
           // firebase.auth.EmailAuthProvider.PROVIDER_ID,
           // firebase.auth.PhoneAuthProvider.PROVIDER_ID,
           // firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
-        ]
+        ],
         // tosUrl and privacyPolicyUrl accept either url string or a callback
         // function.
         // Terms of service url/callback.
@@ -50,6 +50,11 @@ export default {
         // privacyPolicyUrl: function() {
         //  window.location.assign('<your-privacy-policy-url>')
         // }
+	callbacks: {
+                signInSuccessWithAuthResult() {
+                    return 0
+                }
+        }
       }
       const ui = new firebaseui.auth.AuthUI(auth)
       // The start method will wait until the DOM is loaded.
