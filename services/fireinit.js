@@ -1,5 +1,6 @@
 import { Config } from '~/services/config'
 // copia en /services/config.js el fichero .json con la configuración de firebase
+// similar al ejemplo /services/config.js.example
 import * as firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
