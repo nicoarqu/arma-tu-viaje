@@ -1,12 +1,16 @@
+import firebase from 'firebase/app'
 import { Config } from '~/services/config'
 // copia en /services/config.js el fichero .json con la configuración de firebase
 // similar al ejemplo /services/config.js.example
-import * as firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 import 'firebase/storage'
 
-firebase.initializeApp(Config)
+if (!firebase.apps.length) {
+  firebase.initializeApp(Config)
+} else {
+  firebase.app() // if already initialized, use that one
+}
 
 export const GoogleProvider = new firebase.auth.GoogleAuthProvider()
 
@@ -17,7 +21,7 @@ export const storage = firebase.storage()
 
 function getCurrentUserPromise(auth) {
   return new Promise((resolve, reject) => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       unsubscribe()
       resolve(user)
     }, reject)

@@ -5,11 +5,13 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import firebase, { auth } from '~/services/fireinit'
-import * as firebaseui from 'firebaseui'
 
 export default {
   // middleware: 'autenticado', // poner en todas las páginas que requieran autenticacin, menos esta!
   data: () => ({}),
+  async fetch({ store }) {
+    await store.dispatch('user/initAuth')
+  },
   computed: {
     ...mapGetters('user', ['logged']),
     ...mapState('user', ['afterLogin'])
@@ -22,14 +24,15 @@ export default {
       }
     }
   },
-  mounted: function() {
-    this.showLogin()
+  mounted() {
+    const firebaseui = require('firebaseui')
+    this.showLogin(firebaseui)
   },
   methods: {
     next() {
       this.$router.push(this.afterLogin)
     },
-    showLogin() {
+    showLogin(firebaseui) {
       const uiConfig = {
         // signInSuccessUrl: '<url-to-redirect-to-on-success>', //En Nuxt esto sería un problema, ya que firebase-ui no usa vue-route
         signInOptions: [
@@ -50,10 +53,10 @@ export default {
         // privacyPolicyUrl: function() {
         //  window.location.assign('<your-privacy-policy-url>')
         // }
-	callbacks: {
-                signInSuccessWithAuthResult() {
-                    return 0
-                }
+        callbacks: {
+          signInSuccessWithAuthResult() {
+            return 0
+          }
         }
       }
       const ui = new firebaseui.auth.AuthUI(auth)
