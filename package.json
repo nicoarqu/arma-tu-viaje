@@ -1,43 +1,37 @@
 {
   "name": "demo",
   "version": "1.0.0",
-  "description": "My splendid Nuxt.js project",
-  "author": "Miguel",
   "private": true,
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
-    "precommit": "npm run lint"
+    "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
+    "lint:prettier": "prettier --check .",
+    "lint": "npm run lint:js && npm run lint:prettier",
+    "lintfix": "prettier --write --list-different . && npm run lint:js -- --fix"
   },
   "dependencies": {
-    "cross-env": "^5.2.0",
-    "firebase": "^7.14.5",
-    "firebaseui": "^4.0.0",
-    "nuxt": "^2.8.1",
-    "vuetify": "^1.5.16",
-    "vuetify-loader": "^1.2.2"
+    "@nuxtjs/pwa": "^3.3.5",
+    "core-js": "^3.19.3",
+    "firebase": "^9.6.8",
+    "nuxt": "^2.15.8",
+    "vue": "^2.6.14",
+    "vue-server-renderer": "^2.6.14",
+    "vue-template-compiler": "^2.6.14",
+    "vuetify": "^2.6.1",
+    "webpack": "^4.46.0"
   },
   "devDependencies": {
-    "nodemon": "^1.19.1",
-    "@nuxtjs/eslint-config": "^1.0.1",
-    "babel-eslint": "^10.0.2",
-    "eslint": "^6.0.1",
-    "eslint-config-standard": ">=13.0.0",
-    "eslint-plugin-import": ">=2.18.0",
-    "eslint-plugin-jest": ">=22.7.2",
-    "eslint-plugin-node": ">=9.1.0",
-    "eslint-plugin-nuxt": ">=0.4.3",
-    "eslint-plugin-promise": ">=4.2.1",
-    "eslint-plugin-standard": ">=4.0.0",
-    "eslint-loader": "^2.2.1",
-    "eslint-plugin-vue": "^5.2.3",
-    "eslint-config-prettier": "^6.0.0",
-    "eslint-plugin-prettier": "3.1.0",
-    "prettier": "1.18.2",
-    "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.2"
+    "@babel/eslint-parser": "^7.16.3",
+    "@nuxtjs/eslint-config": "^8.0.0",
+    "@nuxtjs/eslint-module": "^3.0.2",
+    "@nuxtjs/vuetify": "^1.12.3",
+    "eslint": "^8.4.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-nuxt": "^3.1.0",
+    "eslint-plugin-vue": "^8.2.0",
+    "prettier": "^2.5.1"
   }
 }
