@@ -1,27 +1,36 @@
-import firebase from 'firebase/app'
-import { Config } from '~/services/config'
+import { initializeApp } from 'firebase/app'
+import {
+  getAuth,
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth'
+
+import { firebaseConfig } from '~/services/config'
 // copia en /services/config.js el fichero .json con la configuración de firebase
 // similar al ejemplo /services/config.js.example
-import 'firebase/auth'
-import 'firebase/firestore'
-import 'firebase/storage'
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(Config)
-} else {
-  firebase.app() // if already initialized, use that one
+let app
+let auth
+
+export function initApp(){
+  if (!app) app = initializeApp(firebaseConfig)
+  return app
 }
 
-export const GoogleProvider = new firebase.auth.GoogleAuthProvider()
-
-export const auth = firebase.auth()
-
-export const db = firebase.firestore()
-export const storage = firebase.storage()
+export function initAuth(userCallback){
+  // Initialize Firebase
+  initApp()
+  if (!auth) auth = getAuth()
+  if (userCallback){
+    onAuthStateChanged(auth, userCallback)
+  }
+  return auth
+}
 
 function getCurrentUserPromise(auth) {
   return new Promise((resolve, reject) => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = onAuthStateChanged(auth, user => {
       unsubscribe()
       resolve(user)
     }, reject)
@@ -29,9 +38,40 @@ function getCurrentUserPromise(auth) {
 }
 
 export const getCurrentUser = async () => {
+  const auth = initAuth()
   if (auth.currentUser) return auth.currentUser
-  const result = await getCurrentUserPromise(auth)
-  return result
+  return await getCurrentUserPromise(auth)
 }
 
-export default firebase
+export async function createUser(email, password) {
+  const userCredential = await createUserWithEmailAndPassword(
+    initAuth(),
+    email,
+    password
+  )
+  return userCredential.user
+}
+
+export async function signIn(email, password) {
+  const userCredential = await signInWithEmailAndPassword(initAuth(), email, password)
+  return userCredential.user
+}
+
+export async function signOut() {
+  await initAuth().signOut()
+}
+
+export async function emailReset(email) {
+  await initAuth().sendPasswordResetEmail(email)
+}
+
+export async function emailVerification(l) {
+  const auth = initAuth()
+  if (auth.currentUser) {
+    await auth.currentUser.sendEmailVerification()
+    return true
+  }
+  else {
+    throw new Error("User not logged, can not send verification email")
+  }
+}

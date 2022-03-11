@@ -1,16 +1,23 @@
 <template>
-  <div id="firebaseui-auth-container" />
+  <a-login :error="error" @signIn="login" @signUp="createUser"></a-login>
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
-import firebase, { auth } from '~/services/fireinit'
+import {mapState, mapActions, mapGetters} from 'vuex'
 
 export default {
-  // middleware: 'autenticado', // poner en todas las páginas que requieran autenticacin, menos esta!
-  data: () => ({}),
-  async fetch({ store }) {
-    await store.dispatch('user/initAuth')
+  data: ()=>({
+    error:'',
+    errorCode: {
+      'invalid-email': 'Invalid e-mail',
+      'user-disabled': 'User account is disabled',
+      'user-not-found': 'User not found, try to sign up instead',
+      'wrong-password': 'Wrong password',
+      'email-already-in-use': 'Email already in use, try to sign in instead'
+    }
+  }),
+  async fetch(){
+    await this.initAuth()
   },
   computed: {
     ...mapGetters('user', ['logged']),
@@ -20,52 +27,29 @@ export default {
     logged: {
       immediate: true,
       handler(logged) {
-        if (logged) this.next()
+        if (logged) this.$router.push(this.afterLogin)
       }
     }
-  },
-  mounted() {
-    const firebaseui = require('firebaseui')
-    this.showLogin(firebaseui)
   },
   methods: {
-    next() {
-      this.$router.push(this.afterLogin)
+    ...mapActions('user', ['signUserIn', 'initAuth', 'signUserUp']),
+    async createUser(user){
+      await this.login(user, true)
     },
-    showLogin(firebaseui) {
-      const uiConfig = {
-        // signInSuccessUrl: '<url-to-redirect-to-on-success>', //En Nuxt esto sería un problema, ya que firebase-ui no usa vue-route
-        signInOptions: [
-          // Leave the lines as is for the providers you want to offer your users.
-          firebase.auth.GoogleAuthProvider.PROVIDER_ID
-          // firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-          // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-          // firebase.auth.GithubAuthProvider.PROVIDER_ID,
-          // firebase.auth.EmailAuthProvider.PROVIDER_ID,
-          // firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-          // firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
-        ],
-        // tosUrl and privacyPolicyUrl accept either url string or a callback
-        // function.
-        // Terms of service url/callback.
-        // tosUrl: '<your-tos-url>',
-        // Privacy policy url/callback.
-        // privacyPolicyUrl: function() {
-        //  window.location.assign('<your-privacy-policy-url>')
-        // }
-        callbacks: {
-          signInSuccessWithAuthResult() {
-            return 0
-          }
-        }
+    async login(user, signUp=false) {
+      try {
+        this.error=''
+        if (signUp)
+          await this.signUserUp(user)
+        else await this.signUserIn(user)
       }
-      const ui =
-        firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth)
-      // The start method will wait until the DOM is loaded.
-      ui.start('#firebaseui-auth-container', uiConfig)
+      catch (error) {
+        const code=error.code.substring(5)
+        this.error=this.errorCode[code] ? this.errorCode[code] : code
+      }
     }
-  }
+  },
 }
 </script>
 
-<style src="~/node_modules/firebaseui/dist/firebaseui.css"></style>
+<style scoped></style>

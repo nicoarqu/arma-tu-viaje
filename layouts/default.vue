@@ -37,6 +37,12 @@
       </v-btn>
       <v-toolbar-title v-text="title" />
       <v-spacer />
+      <v-btn v-if="logged" icon @click.stop="doLogout()">
+        <v-icon>mdi-logout</v-icon>
+      </v-btn>
+      <v-btn v-else icon to="/login">
+        <v-icon>mdi-login</v-icon>
+      </v-btn>
       <v-btn icon @click.stop="rightDrawer = !rightDrawer">
         <v-icon>mdi-menu</v-icon>
       </v-btn>
@@ -63,6 +69,8 @@
 </template>
 
 <script>
+import {mapActions, mapGetters} from "vuex";
+
 export default {
   name: 'DefaultLayout',
   data() {
@@ -88,5 +96,15 @@ export default {
       title: 'Vuetify.js',
     }
   },
+  computed: {
+    ...mapGetters('user', ['logged'])
+  },
+  methods: {
+    ...mapActions('user', ['logout']),
+    doLogout(){
+      this.logout()
+      this.$router.push('/')
+    }
+  }
 }
 </script>
