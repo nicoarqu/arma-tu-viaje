@@ -20,8 +20,7 @@ export function initApp(){
 
 export function initAuth(userCallback){
   // Initialize Firebase
-  initApp()
-  if (!auth) auth = getAuth()
+  if (!auth) auth = getAuth(initApp())
   if (userCallback){
     onAuthStateChanged(auth, userCallback)
   }

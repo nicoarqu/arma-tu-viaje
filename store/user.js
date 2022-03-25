@@ -19,12 +19,14 @@ export const mutations = {
   setUser(state, user) {
     if (user) {
       state.user.displayName = user.displayName
+      state.user.email = user.email
       state.user.uid = user.uid
-      emailVerified: user.emailVerified
+      state.user.emailVerified = user.emailVerified
     } else {
       // clearUserState
       state.user.displayName = ''
       state.user.uid = null
+      state.user.email = ''
       state.user.emailVerified = false
     }
   },
