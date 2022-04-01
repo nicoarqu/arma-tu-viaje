@@ -6,7 +6,7 @@ import {
   signInWithEmailAndPassword,
 } from 'firebase/auth'
 
-import { firebaseConfig } from '~/services/config'
+import { firebaseConfig } from './config'
 // copia en /services/config.js el fichero .json con la configuración de firebase
 // similar al ejemplo /services/config.js.example
 
