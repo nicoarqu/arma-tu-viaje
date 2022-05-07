@@ -3,16 +3,23 @@
     <div class="title">
       <h2>Ciudades</h2>
     </div>
-    <div class="cities">
+    <div class="cities p-3">
       <v-card
         v-for="city in allCities"
         :key="city.id"
-        class="city my-2"
+        class="city my-4"
         elevation="4"
         shaped
       >
-        <v-card-title>{{ city.name }}</v-card-title>
-        <v-card-subtitle>País: {{ city.country }}</v-card-subtitle>
+        <v-img
+          :src="city.src"
+          class="white--text align-end"
+          gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+          height="200px"
+        >
+          <v-card-title>{{ city.name }}</v-card-title>
+          <v-card-subtitle>País: {{ city.country }}</v-card-subtitle>
+        </v-img>
         <v-card-actions>
           <v-btn color="deep-purple lighten-2" text @click="viewCity(city)">
             Ver planes
