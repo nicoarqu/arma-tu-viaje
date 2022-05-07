@@ -1,4 +1,6 @@
-import { initializeApp } from 'firebase/app'
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+
 import {
   getAuth,
   onAuthStateChanged,
@@ -12,6 +14,7 @@ import { firebaseConfig } from './config'
 
 let app
 let auth
+let db;
 
 export function initApp(){
   if (!app) app = initializeApp(firebaseConfig)
@@ -73,4 +76,10 @@ export async function emailVerification(l) {
   else {
     throw new Error("User not logged, can not send verification email")
   }
+}
+
+// Initialize Cloud Firestore and get a reference to the service
+export function getDB(){
+  if (!db) db = getFirestore(initApp());
+  return db;
 }
