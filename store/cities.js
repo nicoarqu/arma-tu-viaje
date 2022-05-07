@@ -22,7 +22,7 @@ export const actions = {
 export const mutations = {
   setCities(state, snapshot) {
     state.cities = snapshot.docs.map((city) => ({
-      id: city.uid,
+      id: city.id,
       ...city.data(),
     }))
   },

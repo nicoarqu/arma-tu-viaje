@@ -1,25 +1,33 @@
+import { doc, getDoc } from 'firebase/firestore'
 import { getDB } from '~/services/fireinit'
+
+const db = getDB()
 
 export const state = () => ({
   city: {
     name: '',
-    uid: null,
+    id: null,
     country: '',
   },
+  plans: [],
 })
 
-export const mutations = {
-  setCity(state, city) {
-      state.city.name = city.name,
-      state.city.uid = city.uid,
-      state.city.country = city.country
+export const actions = {
+  async fetchCity({ commit }, cityId ) {
+    const docRef = doc(db, 'cities', cityId);
+    const docSnap = await getDoc(docRef);
+    const city = {
+      id: docSnap.uid,
+      ...docSnap.data(),
+    }
+    // const info = { city };
+    // get plans --pending
+    commit('setCity', city)
   },
 }
 
-export const actions = {
-  async getCity({ state, commit, dispatch }, { email, password }) {
-    await createUser(email, password)
-    return state.user
+export const mutations = {
+  setCity(state, city) {
+    state.city = city
   },
-
 }
