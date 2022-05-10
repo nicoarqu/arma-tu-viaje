@@ -7,6 +7,22 @@
             error
           }}</v-alert>
         </v-col>
+        <v-col cols="6" md="6">
+          <v-text-field
+            v-model="firstName"
+            :rules="[rules.required]"
+            label="Nombre"
+            required
+          ></v-text-field>
+        </v-col>
+        <v-col cols="6" md="6">
+          <v-text-field
+            v-model="lastName"
+            :rules="[rules.required]"
+            label="Apellido"
+            required
+          ></v-text-field>
+        </v-col>
         <v-col cols="12" md="6">
           <v-text-field
             v-model="email"
@@ -50,6 +66,8 @@ export default {
     show: false,
     email: '',
     password: '',
+    firstName: '',
+    lastName: '',
   }),
   computed: {
     rules() {
@@ -68,7 +86,13 @@ export default {
       this.$emit('signIn', { email: this.email, password: this.password })
     },
     onSignUp() {
-      this.$emit('signUp', { email: this.email, password: this.password })
+      const userData = {
+        email: this.email,
+        password: this.password,
+        firstName: this.firstName,
+        lastName: this.lastName,
+      }
+      this.$emit('signUp', userData)
     },
   },
 }

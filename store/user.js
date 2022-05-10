@@ -1,4 +1,16 @@
-import { initAuth, signOut, signIn, createUser, emailReset, emailVerification } from '~/services/fireinit'
+import { doc, setDoc } from 'firebase/firestore'
+
+import {
+  initAuth,
+  signOut,
+  signIn,
+  createUser,
+  emailReset,
+  emailVerification,
+  getDB,
+} from '~/services/fireinit'
+
+const db = getDB()
 
 export const state = () => ({
   user: {
@@ -50,8 +62,17 @@ export const actions = {
   async logout({ commit, dispatch }) {
     await signOut()
   },
-  async signUserUp({ state, commit, dispatch }, { email, password }) {
-    await createUser(email, password)
+  async signUserUp(
+    { state, commit, dispatch },
+    { email, password, firstName, lastName }
+  ) {
+    const userFs = await createUser(email, password)
+    await setDoc(doc(db, 'users', userFs.uid), {
+      firstName,
+      lastName,
+      email,
+      likes: 0,
+    })
     return state.user
   },
   async signUserIn({ commit, state, dispatch }, { email, password }) {
