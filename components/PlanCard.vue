@@ -61,7 +61,12 @@ export default {
   methods: {
     ...mapActions('plan', ['selectPlan']),
     onClickPlan(){
-      this.selectPlan(this.plan)
+      this.selectPlan(this.plan);
+      this.$router.push({
+        name: 'plan-id',
+        // preserve current path and remove the first char to avoid the target URL starting with `//`
+        params: { id: this.plan.id },
+      })
     }
   }
 }

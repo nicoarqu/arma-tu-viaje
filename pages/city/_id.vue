@@ -1,17 +1,22 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col :cols="8">
+      <v-col :cols="12">
         <v-card elevation="2" shaped>
           <v-img
             :src="city.src"
             class="white--text align-end"
             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-            height="200px"
+            height="230px"
           >
             <v-card-title v-text="city.name"></v-card-title>
             <v-card-subtitle>País: {{ city.country }}</v-card-subtitle>
           </v-img>
+          <v-card-actions>
+            <v-btn >
+              <v-icon>mdi-plus</v-icon> Agregar plan
+            </v-btn>
+          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
