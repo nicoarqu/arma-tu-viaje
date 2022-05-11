@@ -12,7 +12,7 @@
             <v-card-title v-text="city.name"></v-card-title>
             <v-card-subtitle>País: {{ city.country }}</v-card-subtitle>
           </v-img>
-            <v-divider class="mx-3 my-4"></v-divider>
+          <v-divider class="mx-3 my-4"></v-divider>
           <new-plan class="my-2"></new-plan>
         </v-card>
       </v-col>
@@ -39,6 +39,10 @@ export default {
   },
   methods: {
     ...mapActions('city', ['fetchCity']),
+    ...mapActions('user', ['getUserName']),
+  },
+  created() {
+    this.getUserName()
   },
 }
 </script>

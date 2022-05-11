@@ -8,6 +8,9 @@
     >
       <v-card-title v-text="plan.title"></v-card-title>
     </v-img>
+    <v-chip-group class="tags" active-class="primary--text" column>
+      <v-chip v-for="tag in plan.tags" :key="tag">{{ tag }}</v-chip>
+    </v-chip-group>
 
     <v-card-actions>
       <v-btn color="orange lighten-2" text @click="onClickPlan">

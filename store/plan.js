@@ -36,6 +36,10 @@ export const actions = {
     const docRef = await addDoc(collection(db, 'plans'), plan)
     return docRef.id
   },
+  async addSuggestion({ commit }, sugg) {
+    const docRef = await addDoc(collection(db, 'suggestions'), sugg)
+    return docRef.id
+  },
 }
 
 export const mutations = {

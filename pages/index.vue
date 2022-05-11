@@ -11,6 +11,7 @@
         <v-card-text>
           <p>Esta es una app de viajes</p>
           <hr class="my-3" />
+          <v-btn color="primary" nuxt to="/cities"> Ver ciudades </v-btn>
         </v-card-text>
 
         <v-card-actions>
