@@ -1,4 +1,4 @@
-import { doc, setDoc } from 'firebase/firestore'
+import { doc, setDoc, getDoc } from 'firebase/firestore'
 
 import {
   initAuth,
@@ -84,5 +84,15 @@ export const actions = {
   },
   async sendVerificationEmail({ state, dispatch }) {
     return await emailVerification()
+  },
+  async getUserName({ commit, state }) {
+    const docRef = doc(db, 'users', state.user.uid)
+    const docSnap = await getDoc(docRef)
+    const userData = docSnap.data()
+    const user = {
+      ...state.user,
+      displayName: userData.firstName + ' ' + userData.lastName,
+    }
+    commit('setUser', user)
   },
 }
