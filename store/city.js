@@ -1,4 +1,4 @@
-import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore'
+import { doc, getDoc, collection, query, where, onSnapshot } from 'firebase/firestore'
 import { getDB } from '~/services/fireinit'
 
 const db = getDB()
@@ -24,8 +24,10 @@ export const actions = {
     commit('setCity', city);
     // get plans
     const q = query(collection(db, "plans"), where("cityId", "==", city.id));
-    const querySnapshot = await getDocs(q);
-    commit('setPlans', querySnapshot);
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      commit('setPlans', querySnapshot)
+    })
+    return unsubscribe;
   },
 }
 

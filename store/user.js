@@ -19,7 +19,7 @@ export const state = () => ({
     email: null,
     emailVerified: false,
   },
-  afterLogin: '/users', // donde dirigirse una vez complete el login (si accedió y no tenía permiso)
+  afterLogin: '/cities', // donde dirigirse una vez complete el login (si accedió y no tenía permiso)
   listeningAuth: false,
 })
 

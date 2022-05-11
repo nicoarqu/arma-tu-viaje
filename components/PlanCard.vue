@@ -10,7 +10,9 @@
     </v-img>
 
     <v-card-actions>
-      <v-btn color="orange lighten-2" text @click="onClickPlan" > Ver más </v-btn>
+      <v-btn color="orange lighten-2" text @click="onClickPlan">
+        Ver más
+      </v-btn>
 
       <v-spacer></v-spacer>
       <v-btn icon>
@@ -32,13 +34,7 @@
       <div v-show="show">
         <v-divider></v-divider>
 
-        <v-card-text>
-          I'm a thing. But, like most politicians, he promised more than he
-          could deliver. You won't have time for sleeping, soldier, not with all
-          the bed making you'll be doing. Then we'll go with that data file!
-          Hey, you add a one and two zeros to that or we walk! You're going to
-          do his laundry? I've got to find a way to escape.
-        </v-card-text>
+        <v-card-text v-text="plan.description"> </v-card-text>
       </div>
     </v-expand-transition>
   </v-card>
@@ -52,7 +48,7 @@ export default {
   props: {
     plan: {
       type: Object,
-        default: () => ({})
+      default: () => ({}),
     },
   },
   data: () => ({
@@ -60,14 +56,14 @@ export default {
   }),
   methods: {
     ...mapActions('plan', ['selectPlan']),
-    onClickPlan(){
-      this.selectPlan(this.plan);
+    onClickPlan() {
+      this.selectPlan(this.plan)
       this.$router.push({
         name: 'plan-id',
         // preserve current path and remove the first char to avoid the target URL starting with `//`
         params: { id: this.plan.id },
       })
-    }
-  }
+    },
+  },
 }
 </script>

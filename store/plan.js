@@ -1,4 +1,10 @@
-import { collection, query, where, onSnapshot } from 'firebase/firestore'
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  addDoc,
+} from 'firebase/firestore'
 import { getDB } from '~/services/fireinit'
 
 const db = getDB()
@@ -15,7 +21,7 @@ export const actions = {
   selectPlan({ commit }, plan) {
     commit('setPlan', plan)
   },
-  fetchSuggestions({ commit }, planId ) {
+  fetchSuggestions({ commit }, planId) {
     const q = query(
       collection(db, 'suggestions'),
       where('planId', '==', planId),
@@ -25,6 +31,10 @@ export const actions = {
       commit('setSuggestions', querySnapshot)
     })
     return unsubscribe
+  },
+  async addPlan({ commit }, plan) {
+    const docRef = await addDoc(collection(db, 'plans'), plan)
+    return docRef.id
   },
 }
 

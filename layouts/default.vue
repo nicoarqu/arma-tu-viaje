@@ -25,10 +25,6 @@
       </v-list>
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn icon @click.stop="miniVariant = !miniVariant">
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
       <v-btn icon @click.stop="clipped = !clipped">
         <v-icon>mdi-application</v-icon>
       </v-btn>
@@ -37,11 +33,13 @@
       </v-btn>
       <v-toolbar-title v-text="title" />
       <v-spacer />
-      <v-btn v-if="logged" icon @click.stop="doLogout()">
+      <v-btn v-if="logged" @click.stop="doLogout()">
         <v-icon>mdi-logout</v-icon>
+                Cerrar sesión
       </v-btn>
-      <v-btn v-else icon to="/login">
+      <v-btn v-else to="/login">
         <v-icon>mdi-login</v-icon>
+        Iniciar sesión
       </v-btn>
       <v-btn icon @click.stop="rightDrawer = !rightDrawer">
         <v-icon>mdi-menu</v-icon>
