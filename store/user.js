@@ -86,13 +86,15 @@ export const actions = {
     return await emailVerification()
   },
   async getUserName({ commit, state }) {
-    const docRef = doc(db, 'users', state.user.uid)
-    const docSnap = await getDoc(docRef)
-    const userData = docSnap.data()
-    const user = {
-      ...state.user,
-      displayName: userData.firstName + ' ' + userData.lastName,
+    if (state.user.uid) {
+      const docRef = doc(db, 'users', state.user.uid)
+      const docSnap = await getDoc(docRef)
+      const userData = docSnap.data()
+      const user = {
+        ...state.user,
+        displayName: userData.firstName + ' ' + userData.lastName,
+      }
+      commit('setUser', user)
     }
-    commit('setUser', user)
   },
 }
