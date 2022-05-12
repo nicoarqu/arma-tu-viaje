@@ -1,4 +1,16 @@
-import { initAuth, signOut, signIn, createUser, emailReset, emailVerification } from '~/services/fireinit'
+import { doc, setDoc, getDoc } from 'firebase/firestore'
+
+import {
+  initAuth,
+  signOut,
+  signIn,
+  createUser,
+  emailReset,
+  emailVerification,
+  getDB,
+} from '~/services/fireinit'
+
+const db = getDB()
 
 export const state = () => ({
   user: {
@@ -7,7 +19,7 @@ export const state = () => ({
     email: null,
     emailVerified: false,
   },
-  afterLogin: '/users', // donde dirigirse una vez complete el login (si accedió y no tenía permiso)
+  afterLogin: '/cities', // donde dirigirse una vez complete el login (si accedió y no tenía permiso)
   listeningAuth: false,
 })
 
@@ -50,8 +62,17 @@ export const actions = {
   async logout({ commit, dispatch }) {
     await signOut()
   },
-  async signUserUp({ state, commit, dispatch }, { email, password }) {
-    await createUser(email, password)
+  async signUserUp(
+    { state, commit, dispatch },
+    { email, password, firstName, lastName }
+  ) {
+    const userFs = await createUser(email, password)
+    await setDoc(doc(db, 'users', userFs.uid), {
+      firstName,
+      lastName,
+      email,
+      likes: 0,
+    })
     return state.user
   },
   async signUserIn({ commit, state, dispatch }, { email, password }) {
@@ -63,5 +84,17 @@ export const actions = {
   },
   async sendVerificationEmail({ state, dispatch }) {
     return await emailVerification()
+  },
+  async getUserName({ commit, state }) {
+    if (state.user.uid) {
+      const docRef = doc(db, 'users', state.user.uid)
+      const docSnap = await getDoc(docRef)
+      const userData = docSnap.data()
+      const user = {
+        ...state.user,
+        displayName: userData.firstName + ' ' + userData.lastName,
+      }
+      commit('setUser', user)
+    }
   },
 }
