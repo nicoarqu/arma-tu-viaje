@@ -7,9 +7,17 @@
 </template>
 
 <script>
+import { mapActions} from 'vuex'
+
 export default {
   middleware: 'autenticado', // poner en todas las páginas que requieran autenticación
-  data: () => ({})
+  data: () => ({}),
+  created(){
+    this.getUserName()
+  },
+  methods: {
+    ...mapActions('user', ['getUserName']),
+  }
 }
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <a-login :error="error" @signIn="login"></a-login>
+  <a-register :error="error" @signUp="createUser"></a-register>
 </template>
 
 <script>
