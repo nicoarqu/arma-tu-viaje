@@ -21,18 +21,26 @@
         </v-card>
       </v-col>
     </v-row>
+    <review-suggestions
+      v-if="isAuthor"
+      :pending="pending"
+      :rejected="rejected"
+    ></review-suggestions>
   </v-container>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import NewSuggestion from '../../components/NewSuggestion.vue'
+import ReviewSuggestions from '../../components/ReviewSuggestions.vue'
 import SuggestionList from '../../components/SuggestionList.vue'
 export default {
-  components: { SuggestionList, NewSuggestion },
+  components: { SuggestionList, NewSuggestion, ReviewSuggestions },
+  middleware: 'autenticado', // poner en todas las páginas que requieran autenticación
   data: () => ({}),
   computed: {
-    ...mapState('plan', ['plan', 'suggestions']),
+    ...mapState('plan', ['plan', 'suggestions', 'rejected', 'pending']),
+    ...mapGetters('plan', ['isAuthor']),
   },
   created() {
     const planId = this.plan.id || this.$route.params.id

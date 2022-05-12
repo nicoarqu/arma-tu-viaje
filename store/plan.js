@@ -15,13 +15,20 @@ export const state = () => ({
     src: '',
   },
   suggestions: [],
+  pending: [],
+  rejected: [],
 })
+
+export const getters = {
+  isAuthor: (state, getters, rootState) => rootState.user.uid === state.plan.authorId,
+}
+
 
 export const actions = {
   selectPlan({ commit }, plan) {
     commit('setPlan', plan)
   },
-  fetchSuggestions({ commit }, planId) {
+  fetchSuggestions({ commit, state, getters }, planId) {
     const q = query(
       collection(db, 'suggestions'),
       where('planId', '==', planId),
@@ -30,6 +37,24 @@ export const actions = {
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       commit('setSuggestions', querySnapshot)
     })
+    if (getters.isAuthor) {
+      const qPending = query(
+        collection(db, 'suggestions'),
+        where('planId', '==', planId),
+        where('status', '==', 'pending')
+      )
+      onSnapshot(qPending, (querySnapshot) => {
+        commit('setPending', querySnapshot)
+      })
+      const qRejected = query(
+        collection(db, 'suggestions'),
+        where('planId', '==', planId),
+        where('status', '==', 'rejected')
+      )
+      onSnapshot(qRejected, (querySnapshot) => {
+        commit('setRejected', querySnapshot)
+      })
+    }
     return unsubscribe
   },
   async addPlan({ commit }, plan) {
@@ -48,6 +73,18 @@ export const mutations = {
   },
   setSuggestions(state, snapshot) {
     state.suggestions = snapshot.docs.map((map) => ({
+      id: map.id,
+      ...map.data(),
+    }))
+  },
+  setPending(state, snapshot) {
+    state.pending = snapshot.docs.map((map) => ({
+      id: map.id,
+      ...map.data(),
+    }))
+  },
+  setRejected(state, snapshot) {
+    state.rejected = snapshot.docs.map((map) => ({
       id: map.id,
       ...map.data(),
     }))
