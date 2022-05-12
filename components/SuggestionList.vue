@@ -33,7 +33,8 @@
               </v-list-item>
 
               <v-card-actions>
-                <v-btn outlined rounded text> Añadir a favoritos </v-btn>
+                <v-btn outlined rounded text>
+                   <v-icon>mdi-heart</v-icon> Añadir a favoritos </v-btn>
               </v-card-actions>
             </v-card>
           </v-list-item-content>
@@ -57,12 +58,6 @@ export default {
   data: () => ({}),
   methods: {
     ...mapActions('plan', ['selectPlan']),
-    approve() {
-      // approve suggestion
-    },
-    reject() {
-      // reject suggestion
-    },
   },
 }
 </script>

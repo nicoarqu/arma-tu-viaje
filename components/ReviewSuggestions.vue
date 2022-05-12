@@ -25,7 +25,7 @@
                         <v-list-item-content>
                           <div
                             class="text-overline mb-4"
-                            v-text="sug.attraction"
+                            v-text="sug.attraction.name"
                           ></div>
                           <v-list-item-title
                             class="text-h5 mb-1"
@@ -35,20 +35,35 @@
                           <v-list-item-subtitle
                             v-text="sug.text"
                           ></v-list-item-subtitle>
+                          <v-img
+                            :src="sug.attraction.src"
+                            class="white--text align-end"
+                            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+                            height="200px"
+                          ></v-img>
                         </v-list-item-content>
-
-                        <v-list-item-avatar
-                          tile
-                          size="80"
-                          :src="sug.src"
-                        ></v-list-item-avatar>
                       </v-list-item>
-
-                      <v-card-actions>
-                        <v-btn outlined rounded text>
-                          Añadir a favoritos
-                        </v-btn>
-                      </v-card-actions>
+                      <v-row>
+                        <v-col cols="8">
+                          <v-card-actions>
+                            <v-row>
+                              <v-col cols="3">
+                                <v-btn color="blue" @click="approve(sug)">
+                                  <v-icon>mdi-thumb-up</v-icon>
+                                  Aprobar
+                                </v-btn>
+                              </v-col>
+                              <v-spacer></v-spacer>
+                              <v-col cols="3">
+                                <v-btn color="red" @click="reject(sug)">
+                                  <v-icon>mdi-close-circle</v-icon>
+                                  Rechazar
+                                </v-btn>
+                              </v-col>
+                            </v-row>
+                          </v-card-actions>
+                        </v-col>
+                      </v-row>
                     </v-card>
                   </v-list-item-content>
                 </v-list-item>
@@ -72,7 +87,7 @@
                         <v-list-item-content>
                           <div
                             class="text-overline mb-4"
-                            v-text="sug.attraction"
+                            v-text="sug.attraction.name"
                           ></div>
                           <v-list-item-title
                             class="text-h5 mb-1"
@@ -82,20 +97,14 @@
                           <v-list-item-subtitle
                             v-text="sug.text"
                           ></v-list-item-subtitle>
+                          <v-img
+                            :src="sug.attraction.src"
+                            class="white--text align-end"
+                            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+                            height="200px"
+                          ></v-img>
                         </v-list-item-content>
-
-                        <v-list-item-avatar
-                          tile
-                          size="80"
-                          :src="sug.src"
-                        ></v-list-item-avatar>
                       </v-list-item>
-
-                      <v-card-actions>
-                        <v-btn outlined rounded text>
-                          Añadir a favoritos
-                        </v-btn>
-                      </v-card-actions>
                     </v-card>
                   </v-list-item-content>
                 </v-list-item>
@@ -110,7 +119,6 @@
 
 <script>
 import { mapActions } from 'vuex'
-// tabs in 2 rows pending/rejected--pending
 export default {
   name: 'ReviewSuggestions',
   props: {
@@ -127,12 +135,14 @@ export default {
     tab: null,
   }),
   methods: {
-    ...mapActions('plan', ['resolveSuggestion']),
-    approve() {
-      // approve suggestion
+    ...mapActions('plan', ['selectPlan', 'resolveSuggestion']),
+    approve(sug) {
+      const payload = { suggId: sug.id, status: 'approved' }
+      this.resolveSuggestion(payload)
     },
-    reject() {
-      // reject suggestion
+    reject(sug) {
+      const payload = { suggId: sug.id, status: 'rejected' }
+      this.resolveSuggestion(payload)
     },
   },
 }

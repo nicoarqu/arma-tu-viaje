@@ -4,6 +4,8 @@ import {
   where,
   onSnapshot,
   addDoc,
+  doc,
+  updateDoc,
 } from 'firebase/firestore'
 import { getDB } from '~/services/fireinit'
 
@@ -20,13 +22,16 @@ export const state = () => ({
 })
 
 export const getters = {
-  isAuthor: (state, getters, rootState) => rootState.user.uid === state.plan.authorId,
+  isAuthor: (state, getters, rootState) =>
+    rootState.user.uid === state.plan.authorId,
 }
-
 
 export const actions = {
   selectPlan({ commit }, plan) {
-    commit('setPlan', plan)
+    onSnapshot(doc(db, 'plans', plan.id), (ref) => {
+      const planData = {...ref.data(), id: ref.id}
+      commit('setPlan', planData)
+    })
   },
   fetchSuggestions({ commit, state, getters }, planId) {
     const q = query(
@@ -64,6 +69,15 @@ export const actions = {
   async addSuggestion({ commit }, sugg) {
     const docRef = await addDoc(collection(db, 'suggestions'), sugg)
     return docRef.id
+  },
+  async resolveSuggestion({ commit }, { suggId, status }) {
+    const docRef = doc(db, 'suggestions', suggId)
+    await updateDoc(docRef, { status })
+    return docRef.id
+  },
+  async likePlan({ commit, state }, count) {
+    const docRef = doc(db, 'plans', state.plan.id)
+    await updateDoc(docRef, { likes: state.plan.likes + count })
   },
 }
 
